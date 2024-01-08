@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include "common.h"
+#include "gpu_user.h"
 
 struct ring_buffer *global_rb;
 
@@ -17,9 +18,15 @@ static int libbpf_print_fn(enum libbpf_print_level level, const char *format,
 
 int handle_mali_evt(void *ctx, void *data, size_t data_sz) {
   const struct ioctl_evt *evt = data;
-  const pid_t pid = evt->pid_tgid >> 32;
-  //const pid_t tgid = evt->pid_tgid & 0xFFFFFFFF;
-  printf("MALI OP: %d, %lu, 0x%lx\n", pid, evt->cmd, (unsigned long)evt->arg);
+  //const pid_t pid = evt->pid_tgid >> 32;
+  char* cmd = (char*)cmdname(evt->cmd, 0);
+  if (evt->diretion == CPUTOGPU) {
+    printf("%s@%d: CPU -> GPU;\n", cmd, (int)evt->cmd & 0xff);
+    printerofarg(evt->cmd, (uint64_t)evt->data);
+  } else {
+    printf("%s@%d: CPU <- GPU;\n", cmd, (int)evt->cmd & 0xff);
+    printerofret(evt->cmd, (uint64_t)evt->data);
+  }
   return 0;
 
 }

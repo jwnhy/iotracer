@@ -5,9 +5,17 @@
 #include <linux/bpf.h>
 #include <stdint.h>
 #include "common.h"
+#include "gpu_bpf.h"
 
 char LICENSE[] SEC("license") = "Dual BSD/GPL";
 int target_pid = 0;
+
+struct {
+  __uint(type, BPF_MAP_TYPE_HASH);
+  __uint(max_entries, 32);
+  __type(key, uint32_t);
+  __type(value, struct ioctl_ongoing);
+} ongoing_ioctl SEC(".maps");
 
 struct {
   __uint(type, BPF_MAP_TYPE_HASH);
@@ -15,7 +23,6 @@ struct {
   __type(key, uint32_t);
   __type(value, uint8_t);
 } target_set SEC(".maps");
-
 
 struct {
   __uint(type, BPF_MAP_TYPE_HASH);
@@ -35,12 +42,43 @@ int is_target(uint32_t pid) {
   return bpf_map_lookup_elem(&target_set, &pid) != NULL;
 }
 
+SEC("tp/syscalls/sys_exit_ioctl")
+int ioctl_exit(struct ioctl_ret *ctx) {
+  uint64_t pid_tgid = bpf_get_current_pid_tgid();
+  uint32_t pid = pid_tgid >> 32, tgid = pid_tgid & 0xFFFFFFFF;
+  uint32_t retsize;
+  struct ioctl_evt *rb_evt;
+
+  // is an ongoing ioctl op
+  struct ioctl_ongoing *ptr, ongoing;
+  ptr = bpf_map_lookup_elem(&ongoing_ioctl, &pid);
+  if (!ptr)
+    return 0;
+  else {
+    ongoing = *ptr;
+    bpf_map_delete_elem(&ongoing_ioctl, &pid);
+  }
+
+  retsize = sizeofret(ongoing.cmd, 0);
+  rb_evt = bpf_ringbuf_reserve(&rb, sizeof(struct ioctl_evt) + retsize, 0);
+  if (!rb_evt) {
+    bpf_printk("ERROR: ringbuf_reserve failed;\n");
+    return 1;
+  }
+  rb_evt->cmd = ongoing.cmd;
+  rb_evt->fd = ongoing.fd;
+  rb_evt->pid_tgid = pid_tgid;
+  rb_evt->diretion = GPUTOCPU;
+  bpf_probe_read_user(rb_evt->data, retsize, ongoing.data);
+  bpf_ringbuf_submit(rb_evt, 0);
+  return 0;
+}
 
 SEC("tp/syscalls/sys_enter_ioctl")
 int ioctl_entry(struct ioctl_args *ctx) {
   uint64_t pid_tgid = bpf_get_current_pid_tgid();
-  uint32_t pid = pid_tgid >> 32;
-  uint32_t tgid = pid_tgid & 0xFFFFFFFF;
+  uint32_t pid = pid_tgid >> 32, tgid = pid_tgid & 0xFFFFFFFF;
+  uint32_t argsize;
   uint32_t *dev_fd;
   struct ioctl_evt *rb_evt;
 
@@ -53,17 +91,25 @@ int ioctl_entry(struct ioctl_args *ctx) {
   if (!dev_fd || *dev_fd != ctx->fd)
     return 0;
 
-  bpf_printk("PID: %d; TGID: %d\n", pid_tgid >> 32, pid_tgid && 0xFFFFFFFF);
-  rb_evt = bpf_ringbuf_reserve(&rb, sizeof(struct ioctl_evt), 0);
+  struct ioctl_ongoing ongoing = {
+    .fd = ctx->fd,
+    .cmd = ctx->cmd,
+    .data = ctx->arg
+  };
+  bpf_map_update_elem(&ongoing_ioctl, &pid, &ongoing, BPF_NOEXIST);
+
+  argsize = sizeofarg(ctx->cmd, 0);
+  //bpf_printk("PID: %d; TGID: %d\n", pid_tgid >> 32, pid_tgid && 0xFFFFFFFF);
+  rb_evt = bpf_ringbuf_reserve(&rb, sizeof(struct ioctl_evt) + argsize, 0);
   if (!rb_evt) {
     bpf_printk("ERROR: ringbuf_reserve failed;\n");
     return 1;
   }
   rb_evt->cmd = ctx->cmd;
   rb_evt->fd = ctx->fd;
-  rb_evt->arg = ctx->arg;
   rb_evt->pid_tgid = pid_tgid;
-
+  rb_evt->diretion = CPUTOGPU;
+  bpf_probe_read_user(rb_evt->data, argsize, ctx->arg);
   bpf_ringbuf_submit(rb_evt, 0);
   return 0;
 }

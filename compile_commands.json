@@ -16,30 +16,6 @@
       "-Wno-format-overflow",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output//libbpf/staticobjs/bpf.o",
-      "bpf.c"
-    ],
-    "directory": "/home/john/Documents/gpu/libbpf-bootstrap/libbpf/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/libbpf/src/bpf.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/libbpf/staticobjs/bpf.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/cc",
-      "-I.",
-      "-I../include",
-      "-I../include/uapi",
-      "-g",
-      "-O2",
-      "-Werror",
-      "-Wall",
-      "-std=gnu89",
-      "-D_LARGEFILE64_SOURCE",
-      "-D_FILE_OFFSET_BITS=64",
-      "-Wno-unknown-warning-option",
-      "-Wno-format-overflow",
-      "-c",
-      "-o",
       "/home/john/Documents/gpu/iotracer/.output//libbpf/staticobjs/btf.o",
       "btf.c"
     ],
@@ -64,12 +40,12 @@
       "-Wno-format-overflow",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output//libbpf/staticobjs/libbpf.o",
-      "libbpf.c"
+      "/home/john/Documents/gpu/iotracer/.output//libbpf/staticobjs/str_error.o",
+      "str_error.c"
     ],
     "directory": "/home/john/Documents/gpu/libbpf-bootstrap/libbpf/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/libbpf/src/libbpf.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/libbpf/staticobjs/libbpf.o"
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/libbpf/src/str_error.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/libbpf/staticobjs/str_error.o"
   },
   {
     "arguments": [
@@ -160,12 +136,12 @@
       "-Wno-format-overflow",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output//libbpf/staticobjs/str_error.o",
-      "str_error.c"
+      "/home/john/Documents/gpu/iotracer/.output//libbpf/staticobjs/libbpf.o",
+      "libbpf.c"
     ],
     "directory": "/home/john/Documents/gpu/libbpf-bootstrap/libbpf/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/libbpf/src/str_error.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/libbpf/staticobjs/str_error.o"
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/libbpf/src/libbpf.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/libbpf/staticobjs/libbpf.o"
   },
   {
     "arguments": [
@@ -472,12 +448,12 @@
       "-Wno-format-overflow",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/bpf.o",
-      "bpf.c"
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/btf.o",
+      "btf.c"
     ],
     "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src/bpf.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/bpf.o"
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src/btf.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/btf.o"
   },
   {
     "arguments": [
@@ -496,12 +472,12 @@
       "-Wno-format-overflow",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/btf.o",
-      "btf.c"
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/bpf.o",
+      "bpf.c"
     ],
     "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src/btf.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/btf.o"
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src/bpf.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/bpf.o"
   },
   {
     "arguments": [
@@ -712,12 +688,12 @@
       "-Wno-format-overflow",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/hashmap.o",
-      "hashmap.c"
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/ringbuf.o",
+      "ringbuf.c"
     ],
     "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src/hashmap.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/hashmap.o"
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src/ringbuf.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/ringbuf.o"
   },
   {
     "arguments": [
@@ -736,12 +712,12 @@
       "-Wno-format-overflow",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/ringbuf.o",
-      "ringbuf.c"
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/hashmap.o",
+      "hashmap.c"
     ],
     "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src/ringbuf.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/ringbuf.o"
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/libbpf/src/hashmap.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/staticobjs/hashmap.o"
   },
   {
     "arguments": [
@@ -944,92 +920,12 @@
       "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/main.o",
-      "main.c"
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/btf_dumper.o",
+      "btf_dumper.c"
     ],
     "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/main.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/main.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-O2",
-      "-W",
-      "-Wall",
-      "-Wextra",
-      "-Wno-unused-parameter",
-      "-Wno-missing-field-initializers",
-      "-Wbad-function-cast",
-      "-Wdeclaration-after-statement",
-      "-Wformat-security",
-      "-Wformat-y2k",
-      "-Winit-self",
-      "-Wmissing-declarations",
-      "-Wmissing-prototypes",
-      "-Wold-style-definition",
-      "-Wpacked",
-      "-Wredundant-decls",
-      "-Wshadow",
-      "-Wstrict-prototypes",
-      "-Wswitch-default",
-      "-Wundef",
-      "-Wwrite-strings",
-      "-DPACKAGE=\"bpftool\"",
-      "-D__EXPORTED_HEADERS__",
-      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/",
-      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/include",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/kernel/bpf/",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
-      "-c",
-      "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/common.o",
-      "common.c"
-    ],
-    "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/common.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/common.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-O2",
-      "-W",
-      "-Wall",
-      "-Wextra",
-      "-Wno-unused-parameter",
-      "-Wno-missing-field-initializers",
-      "-Wbad-function-cast",
-      "-Wdeclaration-after-statement",
-      "-Wformat-security",
-      "-Wformat-y2k",
-      "-Winit-self",
-      "-Wmissing-declarations",
-      "-Wmissing-prototypes",
-      "-Wold-style-definition",
-      "-Wpacked",
-      "-Wredundant-decls",
-      "-Wshadow",
-      "-Wstrict-prototypes",
-      "-Wswitch-default",
-      "-Wundef",
-      "-Wwrite-strings",
-      "-DPACKAGE=\"bpftool\"",
-      "-D__EXPORTED_HEADERS__",
-      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/",
-      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/include",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/kernel/bpf/",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
-      "-c",
-      "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/json_writer.o",
-      "json_writer.c"
-    ],
-    "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/json_writer.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/json_writer.o"
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/btf_dumper.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/btf_dumper.o"
   },
   {
     "arguments": [
@@ -1104,46 +1000,6 @@
       "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/btf.o",
-      "btf.c"
-    ],
-    "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/btf.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/btf.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-O2",
-      "-W",
-      "-Wall",
-      "-Wextra",
-      "-Wno-unused-parameter",
-      "-Wno-missing-field-initializers",
-      "-Wbad-function-cast",
-      "-Wdeclaration-after-statement",
-      "-Wformat-security",
-      "-Wformat-y2k",
-      "-Winit-self",
-      "-Wmissing-declarations",
-      "-Wmissing-prototypes",
-      "-Wold-style-definition",
-      "-Wpacked",
-      "-Wredundant-decls",
-      "-Wshadow",
-      "-Wstrict-prototypes",
-      "-Wswitch-default",
-      "-Wundef",
-      "-Wwrite-strings",
-      "-DPACKAGE=\"bpftool\"",
-      "-D__EXPORTED_HEADERS__",
-      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/",
-      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/include",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/kernel/bpf/",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
-      "-c",
-      "-o",
       "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/xlated_dumper.o",
       "xlated_dumper.c"
     ],
@@ -1184,12 +1040,92 @@
       "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
       "-c",
       "-o",
-      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/btf_dumper.o",
-      "btf_dumper.c"
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/btf.o",
+      "btf.c"
     ],
     "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src",
-    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/btf_dumper.c",
-    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/btf_dumper.o"
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/btf.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/btf.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-W",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-missing-field-initializers",
+      "-Wbad-function-cast",
+      "-Wdeclaration-after-statement",
+      "-Wformat-security",
+      "-Wformat-y2k",
+      "-Winit-self",
+      "-Wmissing-declarations",
+      "-Wmissing-prototypes",
+      "-Wold-style-definition",
+      "-Wpacked",
+      "-Wredundant-decls",
+      "-Wshadow",
+      "-Wstrict-prototypes",
+      "-Wswitch-default",
+      "-Wundef",
+      "-Wwrite-strings",
+      "-DPACKAGE=\"bpftool\"",
+      "-D__EXPORTED_HEADERS__",
+      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/",
+      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/include",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/kernel/bpf/",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
+      "-c",
+      "-o",
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/json_writer.o",
+      "json_writer.c"
+    ],
+    "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src",
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/json_writer.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/json_writer.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-W",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-missing-field-initializers",
+      "-Wbad-function-cast",
+      "-Wdeclaration-after-statement",
+      "-Wformat-security",
+      "-Wformat-y2k",
+      "-Winit-self",
+      "-Wmissing-declarations",
+      "-Wmissing-prototypes",
+      "-Wold-style-definition",
+      "-Wpacked",
+      "-Wredundant-decls",
+      "-Wshadow",
+      "-Wstrict-prototypes",
+      "-Wswitch-default",
+      "-Wundef",
+      "-Wwrite-strings",
+      "-DPACKAGE=\"bpftool\"",
+      "-D__EXPORTED_HEADERS__",
+      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/",
+      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/include",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/kernel/bpf/",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
+      "-c",
+      "-o",
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/common.o",
+      "common.c"
+    ],
+    "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src",
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/common.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/common.o"
   },
   {
     "arguments": [
@@ -1233,6 +1169,46 @@
   },
   {
     "arguments": [
+      "/usr/bin/gcc",
+      "-O2",
+      "-W",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "-Wno-missing-field-initializers",
+      "-Wbad-function-cast",
+      "-Wdeclaration-after-statement",
+      "-Wformat-security",
+      "-Wformat-y2k",
+      "-Winit-self",
+      "-Wmissing-declarations",
+      "-Wmissing-prototypes",
+      "-Wold-style-definition",
+      "-Wpacked",
+      "-Wredundant-decls",
+      "-Wshadow",
+      "-Wstrict-prototypes",
+      "-Wswitch-default",
+      "-Wundef",
+      "-Wwrite-strings",
+      "-DPACKAGE=\"bpftool\"",
+      "-D__EXPORTED_HEADERS__",
+      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/",
+      "-I/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/libbpf/include",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/kernel/bpf/",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include",
+      "-I/home/john/Documents/gpu/libbpf-bootstrap/bpftool/include/uapi",
+      "-c",
+      "-o",
+      "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/main.o",
+      "main.c"
+    ],
+    "directory": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src",
+    "file": "/home/john/Documents/gpu/libbpf-bootstrap/bpftool/src/main.c",
+    "output": "/home/john/Documents/gpu/iotracer/.output/bpftool/bootstrap/main.o"
+  },
+  {
+    "arguments": [
       "/usr/bin/clang",
       "-g",
       "-O2",
@@ -1242,7 +1218,6 @@
       "-I.output",
       "-I../libbpf-bootstrap/libbpf/include/uapi",
       "-I../libbpf-bootstrap/vmlinux/arm64/",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/blazesym/include",
       "-idirafter",
       "/usr/lib/llvm-14/lib/clang/14.0.0/include",
       "-idirafter",
@@ -1268,7 +1243,6 @@
       "-I.output",
       "-I../libbpf-bootstrap/libbpf/include/uapi",
       "-I../libbpf-bootstrap/vmlinux/arm64/",
-      "-I/home/john/Documents/gpu/libbpf-bootstrap/blazesym/include",
       "-include",
       ".output/minimal.skel.h",
       "-c",

@@ -1,4 +1,13 @@
-#include <linux/types.h>
+#include <stdint.h>
+#define CPUTOGPU 1
+#define GPUTOCPU 2
+
+struct ioctl_ret {
+  uint64_t pad;
+  int32_t syscall_nr;
+  int64_t ret;
+};
+
 struct ioctl_args {
   uint64_t pad;
   int syscall_nr;
@@ -7,11 +16,18 @@ struct ioctl_args {
   char *arg;
 };
 
+struct ioctl_ongoing {
+  uint64_t fd;
+  uint64_t cmd;
+  char *data;
+};
+
 struct ioctl_evt {
   uint64_t pid_tgid;
   uint64_t fd;
   uint64_t cmd;
-  char *arg;
+  uint8_t diretion;
+  char data[0];
 };
 
 struct openat_args {
