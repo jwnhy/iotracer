@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "common.h"
 #include "gpu_user.h"
+#include "minimal.skel.h"
 
 struct ring_buffer *global_rb;
 
