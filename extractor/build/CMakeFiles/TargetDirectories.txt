@@ -1,3 +1,0 @@
-/home/john/nvidia/iotracer/extractor/build/CMakeFiles/CaseVisitor.dir
-/home/john/nvidia/iotracer/extractor/build/CMakeFiles/edit_cache.dir
-/home/john/nvidia/iotracer/extractor/build/CMakeFiles/rebuild_cache.dir
