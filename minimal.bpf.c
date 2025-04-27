@@ -121,6 +121,7 @@ int is_nvidia(const char *dev_name) {
 static int insert_dev(uint32_t nr, struct nvidia_dev_t *dev) {
   struct nvidia_dev_t *slot = bpf_map_lookup_elem(&opened_nvidia, &nr);
   if (slot && slot->found == 0) {
+    dev->found = 1;
     bpf_map_update_elem(&opened_nvidia, &nr, dev, BPF_ANY);
     return 1;
   }
