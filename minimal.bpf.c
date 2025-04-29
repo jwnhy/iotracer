@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
 /* Copyright (c) 2020 Facebook */
 #include "common.h"
-#include "gpu_bpf.h"
+#include "gpu_ioctl.h"
 #include <linux/bpf.h>
 #include <linux/types.h>
 #include <stdint.h>
@@ -67,6 +67,23 @@ int ioctl_exit(struct ioctl_ret *ctx) {
   uint32_t retsize;
   struct ioctl_evt *rb_evt;
 
+  struct ioctl_ongoing* ongoing = bpf_map_lookup_elem(&ongoing_ioctl, &pid);
+  if (!ongoing)
+    return 0;
+  bpf_map_delete_elem(&ongoing_ioctl, &pid);
+  retsize = sizeofarg(ongoing->cmd);
+
+  rb_evt = bpf_ringbuf_reserve(&rb, sizeof(struct ioctl_evt) + retsize, 0);
+  if (!rb_evt) {
+    bpf_printk("ERROR: ringbuf reserve failed;\n");
+    return 0;
+  }
+  rb_evt->cmd = ongoing->cmd;
+  rb_evt->fd = ongoing->fd;
+  rb_evt->pid_tgid = pid_tgid;
+  rb_evt->diretion = GPUTOCPU;
+  bpf_probe_read_user(rb_evt->data, retsize, ongoing->data);
+  bpf_ringbuf_submit(rb_evt, 0);
   return 0;
 }
 
@@ -92,7 +109,14 @@ int ioctl_entry(struct ioctl_args *ctx) {
     return 0;
   bpf_printk("device found");
 
-  argsize = sizeofparam(ctx->cmd, 0);
+  struct ioctl_ongoing ongoing = {
+    .fd = ctx->fd,
+    .cmd = ctx->cmd,
+    .data = ctx->arg,
+  };
+  bpf_map_update_elem(&ongoing_ioctl, &pid, &ongoing, BPF_NOEXIST);
+
+  argsize = sizeofarg(ctx->cmd);
   rb_evt = bpf_ringbuf_reserve(&rb, sizeof(struct ioctl_evt) + argsize, 0);
   if (!rb_evt) {
     bpf_printk("ERROR: ringbuf reserve failed;\n");
@@ -108,7 +132,7 @@ int ioctl_entry(struct ioctl_args *ctx) {
 }
 
 int is_nvidia(const char *dev_name) {
-  const char *mali[3] = {"/dev/nvidia-uvm", "/dev/nvidia0", "/dev/nvidiactl"};
+  const char *mali[3] = {"/dev/nvidia-uvm", "", ""};
   if (!dev_name)
     return 0;
   for (int i = 0; i < 3; i++) {

@@ -20,13 +20,12 @@ static int libbpf_print_fn(enum libbpf_print_level level, const char *format,
 int handle_mali_evt(void *ctx, void *data, size_t data_sz) {
   const struct ioctl_evt *evt = data;
   //const pid_t pid = evt->pid_tgid >> 32;
-  char* cmd = (char*)cmdname(evt->cmd, 0);
   if (evt->diretion == CPUTOGPU) {
-    printf("%s@%d: CPU -> GPU;\n", cmd, (int)evt->cmd & 0xff);
-    printerofarg(evt->cmd, (uint64_t)evt->data);
+    printf("%d: CPU -> GPU;\n", (int)evt->cmd & 0xff);
+    printarg(evt->cmd, (void*)evt->data);
   } else {
-    printf("%s@%d: CPU <- GPU;\n", cmd, (int)evt->cmd & 0xff);
-    printerofret(evt->cmd, (uint64_t)evt->data);
+    printf("%d: CPU <- GPU;\n", (int)evt->cmd & 0xff);
+    printarg(evt->cmd, (void*)evt->data);
   }
   return 0;
 

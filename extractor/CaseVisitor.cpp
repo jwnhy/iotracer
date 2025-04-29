@@ -33,13 +33,13 @@ struct Typ {
   std::string name;
   std::string format_str;
 
-  bool is_pointer;
+  bool is_pointer = 0;
   uint64_t size;
 
-  bool is_primitive;
-  bool is_array;
-  bool is_struct;
-  bool is_union;
+  bool is_primitive = 0;
+  bool is_array = 0;
+  bool is_struct = 0;
+  bool is_union = 0;
   // for array/pointer
   std::shared_ptr<Typ> sub_type;
   // for array
@@ -84,8 +84,146 @@ const clang::RecordDecl *getUnderlyingRecordType(clang::QualType qt,
   return nullptr;
 }
 
-void generate_field_printer() {
+void generateTypeDefinition(const std::shared_ptr<Typ> &typ, std::ostream &os) {
+  if (typ->is_primitive && !typ->is_array) {
+    os << typ->name;
+  } else if (typ->is_pointer) {
+    os << typ->name << "*";
+  } else if (typ->is_array) {
+    os << typ->sub_type->name;
+  } else if (typ->is_struct || typ->is_union) {
+    os << typ->name; // 结构体或联合类型
+  }
+}
 
+void generateStructDefinition(const std::shared_ptr<Record> &record,
+                              std::ostream &os) {
+  auto name = record->name;
+  auto hasStruct = name.find("struct") != std::string::npos;
+  if (hasStruct) {
+    os << name << " {\n";
+  } else {
+    os << "typedef struct" << " {\n";
+  }
+
+  for (const auto &field : record->fields) {
+    generateTypeDefinition(field->type, os);
+    os << "    " << field->name << " ";
+    if (field->type->is_array) {
+      os << "[" << field->type->nr << "]";
+    }
+    os << ";\n";
+  }
+
+  if (hasStruct) {
+    os << "};\n";
+  } else {
+    os << "}" << name << ";\n";
+  }
+}
+
+void generateSizeofarg(
+    const std::unordered_map<std::string, std::shared_ptr<Record>> &record_map,
+    const std::vector<std::tuple<uint64_t, std::string>> &ioctl_map,
+    std::ostream &out) {
+  out << "static inline uint64_t sizeofarg(int cmd) {\n";
+  out << "    switch (cmd) {\n";
+  for (const auto &[cmd, record_name] : ioctl_map) {
+    out << "    case " << cmd << ": return sizeof(" << record_name << ");\n";
+  }
+  out << "    default: return 0;\n";
+  out << "    }\n";
+  out << "}\n\n";
+}
+
+void generatePrinterForType(
+    const std::shared_ptr<Typ> &type, const std::string &accessor, int indent,
+    const std::unordered_map<std::string, std::shared_ptr<Record>> &record_map,
+    std::ostream &out) {
+  std::string indent_str(indent, ' ');
+
+  if (type->is_primitive) {
+    if (type->format_str.empty()) {
+      out << indent_str << "printf(\"" << accessor
+          << ": %lu\\n\", (unsigned long)(" << accessor << "));\n";
+    } else {
+      out << indent_str << "printf(\"" << accessor << ": " << type->format_str
+          << "\\n\", " << accessor << ");\n";
+    }
+  } else if (type->is_pointer) {
+    out << indent_str << "if (" << accessor << ") {\n";
+    generatePrinterForType(type->sub_type, "*" + accessor, indent + 4,
+                           record_map, out);
+    out << indent_str << "} else {\n";
+    out << indent_str << "    printf(\"" << accessor << ": NULL\\n\");\n";
+    out << indent_str << "}\n";
+  } else if (type->is_array) {
+    out << indent_str << "for (uint64_t i = 0; i < " << type->nr
+        << "; ++i) {\n";
+    generatePrinterForType(type->sub_type, accessor + "[i]", indent + 4,
+                           record_map, out);
+    out << indent_str << "}\n";
+  } else if (type->is_struct) {
+    // 查找Record
+    auto it = record_map.find(type->name);
+    if (it != record_map.end()) {
+      auto nospace_name = type->name;
+      std::replace(nospace_name.begin(), nospace_name.end(), ' ', '_');
+      out << indent_str << "printf(\"" << accessor << ":\\n\");\n";
+      out << indent_str << "printer_" << nospace_name << "(&(" << accessor
+          << "));\n";
+    } else {
+      out << indent_str << "printf(\"" << accessor
+          << ": <unknown struct>\\n\");\n";
+    }
+  } else if (type->is_union) {
+    out << indent_str << "/* Union printing not supported yet */\n";
+  } else {
+    out << indent_str << "printf(\"" << accessor << ": <unknown type>\\n\");\n";
+  }
+}
+
+void generatePrinter(
+    const std::unordered_map<std::string, std::shared_ptr<Record>> &record_map,
+    std::ostream &out) {
+  for (const auto &[record_name, record_ptr] : record_map) {
+    auto nospace_name = record_name;
+    std::replace(nospace_name.begin(), nospace_name.end(), ' ', '_');
+    out << "static inline void printer_" << nospace_name << "(" << record_name
+        << "* obj) {\n";
+    out << "    printf(\"" << record_name << " {\\n\");\n";
+    for (const auto &field : record_ptr->fields) {
+      std::string accessor = "obj->" + field->name;
+      generatePrinterForType(field->type, accessor, 4, record_map, out);
+    }
+    out << "    printf(\"}\\n\");\n";
+    out << "}\n\n";
+  }
+}
+
+void generatePrintarg(
+    const std::unordered_map<std::string, std::shared_ptr<Record>> &record_map,
+    const std::vector<std::tuple<uint64_t, std::string>> &ioctl_map,
+    std::ostream &out) {
+  out << "static inline void printarg(int cmd, void* arg) {\n";
+  out << "    switch (cmd) {\n";
+  for (const auto &[cmd, record_name] : ioctl_map) {
+    // 确保record存在
+    if (record_map.count(record_name)) {
+      auto nospace_name = record_name;
+      std::replace(nospace_name.begin(), nospace_name.end(), ' ', '_');
+
+      out << "    case " << cmd << ":\n";
+      out << "        printer_" << nospace_name << "((" << record_name
+          << "*)arg);\n";
+      out << "        break;\n";
+    }
+  }
+  out << "    default:\n";
+  out << "        printf(\"Unknown cmd: %d\\n\", cmd);\n";
+  out << "        break;\n";
+  out << "    }\n";
+  out << "}\n\n";
 }
 
 struct Record convertRecordDecl(const clang::RecordDecl *recordDecl);
@@ -109,14 +247,16 @@ struct Typ convertTyp(const clang::QualType &qt, ASTContext &ctx) {
     auto subType = uqt->getArrayElementTypeNoTypeQual();
     if (subType->isCharType()) {
       typ.format_str = "%s";
+      typ.is_primitive = true;
+      typ.is_array = true;
     } else {
       typ.format_str = "0x%lx";
+      typ.is_array = true;
     }
     typ.sub_type = std::make_unique<Typ>(convertTyp(QualType(subType, 0), ctx));
     typ.nr = dyn_cast<clang::ConstantArrayType>(uqt.getTypePtr())
                  ->getSize()
                  .getZExtValue();
-    typ.is_array = true;
   } else if (uqt->isStructureType()) {
     auto recordDecl = uqt->getAsStructureType()->getDecl();
     struct Record record = convertRecordDecl(recordDecl);
@@ -157,7 +297,7 @@ struct Record convertRecordDecl(const clang::RecordDecl *recordDecl) {
 
 class CaseVisitor : public MatchFinder::MatchCallback {
 public:
-  virtual void run(const MatchFinder::MatchResult &Result) {
+  virtual void run(const MatchFinder::MatchResult &Result) override {
     if (const IntegerLiteral *IL =
             Result.Nodes.getNodeAs<IntegerLiteral>("case_value")) {
       this->cmd = IL->getValue().getZExtValue();
@@ -229,18 +369,11 @@ int main(int argc, const char **argv) {
   Finder.addMatcher(CaseMatcher, &Visitor);
 
   Tool.run(newFrontendActionFactory(&Finder).get());
-  for (auto [cmd, name] : ioctl_map) {
-    std::cout << "ioctl cmd: " << std::hex << cmd << ", type: " << name
-              << std::endl;
+
+  for (const auto record : record_map) {
+    generateStructDefinition(record.second, std::cout);
   }
-  for (auto [name, record] : record_map) {
-    std::cout << "record name: " << name << std::endl;
-    for (auto field : record->fields) {
-      std::cout << "  field name: " << field->name
-                << ", type: " << field->type->name
-                << ", offset: " << field->offset
-                << ", size: " << field->type->size
-                << ", format: " << field->type->format_str << std::endl;
-    }
-  }
+  generateSizeofarg(record_map, ioctl_map, std::cout);
+  generatePrinter(record_map, std::cout);
+  generatePrintarg(record_map, ioctl_map, std::cout);
 }
